@@ -21,7 +21,7 @@
                   <a class="nav-link active" aria-current="page" href="#">Home</a>
                   <a class="nav-link" href="#">Features</a>
                   <a class="nav-link" href="#">Pricing</a>
-                  <a class="nav-link" href="#">Disabled</a>
+                  <a class="nav-link" href="{% url 'signIn'%}">Sign In</a>
                 </div>
               </div>
               <form class="d-flex">
@@ -30,5 +30,7 @@
               </form>
             </div> 
           </nav>
+          {% block body %}
+          {% endblock %}
     </body>
 </html>
