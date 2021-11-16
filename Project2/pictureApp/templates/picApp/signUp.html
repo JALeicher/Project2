@@ -19,7 +19,9 @@
 {% block body %}   
     <form method="POST">
         {% csrf_token %}
+        <div style="color: white; padding: 10px;">
         {{ signUpForm }}
+        </div>
         <button type="submit" class="btn btn-primary" onclick="matchPassword">Submit</button>
     </form>
 {% endblock %}
