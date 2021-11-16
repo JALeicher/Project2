@@ -1,0 +1,11 @@
+{% extends 'picApp/homepage.html' %}
+
+{% block head %}
+{% endblock %}
+
+{% block body %}
+    <p>HELLO {{user.username}}</p>
+    <form action="{% url 'logout' %}">
+        <button type="submit" class="btn btn-danger">GTFO</button>
+    </form>
+{% endblock %}
