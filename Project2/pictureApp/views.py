@@ -1,9 +1,12 @@
+from datetime import date
 from django.http.response import HttpResponseRedirect
+from django.core.files.storage import FileSystemStorage
 from django.shortcuts import render
 from django.contrib.auth import authenticate, login, logout
 from django.urls import reverse
 
-from pictureApp.forms.forms import SignUpForm
+from pictureApp.forms.forms import SignUpForm, PostForm
+from .models import *
 
 # Create your views here.
 def homepage_view(request):
@@ -38,3 +41,14 @@ def logout_view(request):
 
 def userpage_view(request):
     return render(request,"picApp/userpage.html")
+
+def imageUpload_view(request):
+    if request.method == "POST" and request.FILES['upload']:
+        user = request.user
+        im = request.FILES['upload']
+        d = date.today()
+        newpost = User_Post(main_user=user, image=im, date=d)
+        newpost.save()
+        return HttpResponseRedirect(reverse("homepage"))
+    else:
+       return render(request, "picApp/imageUpload.html" ) 

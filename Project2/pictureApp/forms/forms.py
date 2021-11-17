@@ -1,4 +1,5 @@
 from django import forms
+from pictureApp.models import User_Post
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from django.forms import widgets
@@ -7,7 +8,6 @@ fieldCSS = 'width: 300px; margin: 5px;'
 
 class SignUpForm(UserCreationForm): 
     email = forms.EmailField(required=True, widget=forms.EmailInput(attrs={'placeholder' :'something@somewhere.foo', 'style' : fieldCSS}))
-
     class Meta:
         model = User
         fields = ('username', 'email', 'password1', 'password2', )
@@ -22,3 +22,8 @@ class SignUpForm(UserCreationForm):
         if commit:
             user.save()
         return user
+
+class PostForm(forms.ModelForm):
+    class Meta:
+        model = User_Post
+        fields =('image',)

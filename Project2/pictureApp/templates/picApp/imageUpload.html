@@ -1,0 +1,15 @@
+{% extends 'picApp/homepage.html' %}
+
+{% block head %}
+{% endblock %}
+
+{% block body %}
+    <form method="post" action="{% url 'imageUpload' %}" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="mb-3">
+            <label for="formFile" class="form-label">Default file input example</label>
+            <input class="form-control" name="upload" type="file" id="formFile" accept=" .bmp, .ico, .jpeg, .jpg, .gif, .tiff, .png">
+        </div>
+        <input class="btn btn-primary" type="submit" value="Submit">
+    </form>
+{% endblock %}
