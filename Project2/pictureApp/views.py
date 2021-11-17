@@ -2,7 +2,7 @@ from datetime import date
 from django.http.response import HttpResponseRedirect
 from django.core.files.storage import FileSystemStorage
 from django.shortcuts import render
-from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth import authenticate, get_user, login, logout
 from django.urls import reverse
 
 from pictureApp.forms.forms import SignUpForm, PostForm
@@ -10,7 +10,11 @@ from .models import *
 
 # Create your views here.
 def homepage_view(request):
-    posts = User_Post.objects.all()
+    posts = User_Post.objects.order_by('-date')
+    return render(request, "picApp/homepage.html",{'posts':posts})
+
+def userposts_view(request, username):
+    posts = User_Post.objects.filter(main_user_id= request.user)
     return render(request, "picApp/homepage.html",{'posts':posts})
 
 def login_view(request):

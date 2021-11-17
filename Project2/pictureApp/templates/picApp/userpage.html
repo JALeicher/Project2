@@ -4,8 +4,12 @@
 {% endblock %}
 
 {% block body %}
-    <p>HELLO {{user.username}}</p>
-    <form action="{% url 'logout' %}">
-        <button type="submit" class="btn btn-danger">GTFO</button>
-    </form>
+    <div style="color: whitesmoke; padding: 10px;">
+        <p>Hello, {{user.username}}.</p>
+        <p>We're sorry to see you go!</p>
+        <form action="{% url 'logout' %}">
+            <button type="submit" class="btn btn-danger">Logout</button>
+        </form>
+    </div>
+    
 {% endblock %}

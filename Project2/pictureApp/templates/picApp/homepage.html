@@ -5,7 +5,7 @@
 
 {% block body %}
   {% for p in posts %}
-    <div class="card" style="width: 18rem;">
+    <div class="card" style="width: 25vw; margin-left: auto; margin-right: auto; margin-bottom: 3px; margin-top: 5px;">
       <img src="{{p.image.url}}" class="card-img-top">
       <div class="card-body">
         <p class="card-text">{{p.date}} <br> posted by: {{p.main_user}}</p>
