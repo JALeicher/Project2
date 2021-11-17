@@ -27,13 +27,20 @@ def login_view(request):
 
 def signup_request(request):
     if request.method == "POST":
-        form = SignUpForm(request.POST)
+        username = request.POST['username']
+        email = request.POST['email']
+        user = User.objects.create_user(username=username,email=email,password=request.POST['password1'])
+        user.save()
+        return HttpResponseRedirect(reverse("login"))
+        '''form = SignUpForm(request.POST)
         if form.is_valid():
             user = form.save()
             login(request,user)
-            return HttpResponseRedirect(reverse("login"))
-    form = SignUpForm()
-    return render(request=request, template_name="picApp/signUp.html",context={'signUpForm':form})
+            return HttpResponseRedirect(reverse("login"))'''      
+    else:
+        return render(request, "picApp/signUp.html" ) 
+    '''form = SignUpForm()
+    return render(request=request, template_name="picApp/signUp.html",context={'signUpForm':form})'''
 
 def logout_view(request):
     logout(request)
