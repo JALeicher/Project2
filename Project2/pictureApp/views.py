@@ -10,7 +10,8 @@ from .models import *
 
 # Create your views here.
 def homepage_view(request):
-    return render(request, "picApp/homepage.html")
+    posts = User_Post.objects.all()
+    return render(request, "picApp/homepage.html",{'posts':posts})
 
 def login_view(request):
     if request.method == "POST":
