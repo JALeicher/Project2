@@ -14,7 +14,7 @@ def homepage_view(request):
     return render(request, "picApp/homepage.html",{'posts':posts})
 
 def userposts_view(request, username):
-    posts = User_Post.objects.filter(main_user_id= request.user)
+    posts = User_Post.objects.filter(main_user_id= request.user).order_by('-date')
     return render(request, "picApp/homepage.html",{'posts':posts})
 
 def login_view(request):
