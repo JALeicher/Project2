@@ -12,7 +12,11 @@
       style="width: 20vw; margin-left: 10px;">
       <img src="{{p.image.url}}" class="card-img-top">
       <div class="card-body">
-        <div class="card-text">{{p.date}} <br> posted by: {{p.main_user}}</div>
+        <div class="card-text">{{p.date}} <br> posted by: {{p.main_user}} <br>
+          {% for t in p.tags.all %}
+            #{{t}} 
+          {% endfor %}
+        </div>
       </div>
     </div>
     {% endfor %}

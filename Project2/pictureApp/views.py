@@ -1,11 +1,12 @@
-from datetime import date
 from django.http.response import HttpResponseRedirect
-from django.core.files.storage import FileSystemStorage
-from django.shortcuts import render
-from django.contrib.auth import authenticate, get_user, login, logout
+from django.shortcuts import get_object_or_404, render
+from django.contrib.auth import authenticate, login, logout
 from django.urls import reverse
 
-from pictureApp.forms.forms import SignUpForm, PostForm
+from taggit.models import Tag
+
+from pictureApp.forms.forms import PostForm
+from .forms import *
 from .models import *
 
 # Create your views here.
@@ -36,16 +37,9 @@ def signup_request(request):
         email = request.POST['email']
         user = User.objects.create_user(username=username,email=email,password=request.POST['password1'])
         user.save()
-        return HttpResponseRedirect(reverse("login"))
-        '''form = SignUpForm(request.POST)
-        if form.is_valid():
-            user = form.save()
-            login(request,user)
-            return HttpResponseRedirect(reverse("login"))'''      
+        return HttpResponseRedirect(reverse("login"))    
     else:
         return render(request, "picApp/signUp.html" ) 
-    '''form = SignUpForm()
-    return render(request=request, template_name="picApp/signUp.html",context={'signUpForm':form})'''
 
 def logout_view(request):
     logout(request)
@@ -55,12 +49,13 @@ def userpage_view(request):
     return render(request,"picApp/userpage.html")
 
 def imageUpload_view(request):
-    if request.method == "POST" and request.FILES['upload']:
-        user = request.user
-        im = request.FILES['upload']
-        d = date.today()
-        newpost = User_Post(main_user=user, image=im, date=d)
-        newpost.save()
+    if request.method == "POST":
+        form = PostForm(request.POST,request.FILES)
+        if form.is_valid():
+            newpost = form.save(commit=False)
+            newpost.user=request.user 
+            newpost.save()
+            form.save_m2m()
         return HttpResponseRedirect(reverse("homepage"))
     else:
-       return render(request, "picApp/imageUpload.html" ) 
+       return render(request, "picApp/imageUpload.html",{"form":PostForm()} ) 
