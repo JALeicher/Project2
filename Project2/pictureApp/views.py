@@ -1,5 +1,6 @@
+from django.http import request
 from django.http.response import HttpResponseRedirect
-from django.shortcuts import get_object_or_404, render
+from django.shortcuts import render
 from django.contrib.auth import authenticate, login, logout
 from django.urls import reverse
 
@@ -50,12 +51,12 @@ def userpage_view(request):
 
 def imageUpload_view(request):
     if request.method == "POST":
-        form = PostForm(request.POST,request.FILES)
+        form = PostForm(request.POST,request.FILES,user_pk=request.user.pk,)
         if form.is_valid():
             newpost = form.save(commit=False)
-            newpost.user=request.user 
+            newpost.main_user=request.user 
             newpost.save()
             form.save_m2m()
         return HttpResponseRedirect(reverse("homepage"))
     else:
-       return render(request, "picApp/imageUpload.html",{"form":PostForm()} ) 
+       return render(request, "picApp/imageUpload.html",{"form":PostForm(user_pk=request.user.pk)} ) 
