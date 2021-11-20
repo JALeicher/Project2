@@ -11,3 +11,9 @@ class User_Post(models.Model):
     date = models.DateTimeField(auto_now_add=True)
     tags = TaggableManager()
     shared_users=models.ManyToManyField(User, related_name="shared_users")
+    
+class User_Albums(models.Model):
+    album_name = models.TextField()
+    albumDescription = models.models.CharField( max_length=240)
+    createdBy = models.ForeignKey(User, on_delete=models.CASCADE, default=1, related_name="main_user")
+    contents = models.ManyToManyField(User_Post,related_name="contents")

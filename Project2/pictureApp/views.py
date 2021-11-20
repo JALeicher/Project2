@@ -59,4 +59,7 @@ def imageUpload_view(request):
             form.save_m2m()
         return HttpResponseRedirect(reverse("homepage"))
     else:
-       return render(request, "picApp/imageUpload.html",{"form":PostForm(user_pk=request.user.pk)} ) 
+       return render(request, "picApp/imageUpload.html",{"form":PostForm(user_pk=request.user.pk)} )
+   
+def albums_view(request):
+    return render(request,"picApp/albums.html") 
