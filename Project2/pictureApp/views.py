@@ -1,9 +1,11 @@
+from django.db.models.query import EmptyQuerySet
 from django.http import request
 from django.http.response import HttpResponseRedirect
 from django.shortcuts import render
 from django.contrib.auth import authenticate, login, logout
 from django.urls import reverse
-from taggit.models import Tag
+import piexif
+
 
 from pictureApp.forms.forms import PostForm, AlbumForm
 from .models import *
@@ -12,6 +14,7 @@ from .models import *
 def homepage_view(request):
     posts = User_Post.objects.order_by('-date')
     return render(request, "picApp/homepage.html",{'posts':posts})
+    
 
 def userposts_view(request, username):
     posts = User_Post.objects.filter(main_user_id= request.user).order_by('-date')
@@ -81,4 +84,9 @@ def albumCreate_View(request):
         return render(request,"picApp/albumsAdd.html",{
             'form': AlbumForm(user_pk=request.user.pk)          
         })
-    
+        
+'''def showMeta_view(request, post_id):
+    selected=User_Post.objects.get(pk = post_id)
+    image_name = str(selected)
+    meta_dict = piexif.load(image_name)'''
+        
