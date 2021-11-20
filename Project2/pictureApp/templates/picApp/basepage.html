@@ -14,8 +14,7 @@
 {% block script%}
 {% endblock %}
 
-<body
-  style="background: linear-gradient(90deg, rgba(36,0,0,1) 0%, rgba(6,6,6,1) 0%, rgba(35,35,36,1) 100%); padding-top: 60px;">
+<body style="background: linear-gradient(90deg, rgba(36,0,0,1) 0%, rgba(6,6,6,1) 0%, rgba(35,35,36,1) 100%); padding-top: 60px;">
   <nav class="navbar navbar-expand-lg navbar-dark fixed-top bg-dark">
     <div class="container-fluid">
       <a class="navbar-brand" href="#">
@@ -38,10 +37,8 @@
         <div class="navbar-nav">
           <a class="nav-link" aria-current="page" href="{% url 'homepage' %}">Home</a>
           {% if user.is_authenticated %}
-          <a class="nav-link" href="#">Albums</a>
-          <a class="nav-link" href="{% url 'userPosts' user.username %}">My Posts</a>
           <a class="nav-link" href="{% url 'imageUpload' %}">New Post</a>
-          <a class="nav-link" href="{% url 'userpage' %}">{{user.username}}</a>
+          <a class="nav-link" href="{% url 'albums' %}">{{user.username}}</a>
           {% else %}
           <a class="nav-link" href="{% url 'login' %}">Sign In</a>
           {% endif %}

@@ -1,12 +1,11 @@
+from django.http import request
 from django.http.response import HttpResponseRedirect
-from django.shortcuts import get_object_or_404, render
+from django.shortcuts import render
 from django.contrib.auth import authenticate, login, logout
 from django.urls import reverse
-
 from taggit.models import Tag
 
-from pictureApp.forms.forms import PostForm
-from .forms import *
+from pictureApp.forms.forms import PostForm, AlbumForm
 from .models import *
 
 # Create your views here.
@@ -16,7 +15,8 @@ def homepage_view(request):
 
 def userposts_view(request, username):
     posts = User_Post.objects.filter(main_user_id= request.user).order_by('-date')
-    return render(request, "picApp/homepage.html",{'posts':posts})
+    message = "{}"
+    return render(request, "picApp/userImages.html",{'posts':posts, 'message':message.format(request.user.username)})
 
 def login_view(request):
     if request.method == "POST":
@@ -45,17 +45,40 @@ def logout_view(request):
     logout(request)
     return HttpResponseRedirect(reverse("homepage"))
 
-def userpage_view(request):
-    return render(request,"picApp/userpage.html")
-
 def imageUpload_view(request):
     if request.method == "POST":
-        form = PostForm(request.POST,request.FILES)
+        form = PostForm(request.POST,request.FILES,user_pk=request.user.pk)
         if form.is_valid():
             newpost = form.save(commit=False)
-            newpost.user=request.user 
+            newpost.main_user=request.user 
             newpost.save()
             form.save_m2m()
         return HttpResponseRedirect(reverse("homepage"))
     else:
-       return render(request, "picApp/imageUpload.html",{"form":PostForm()} ) 
+       return render(request, "picApp/imageUpload.html",{
+           "form":PostForm(user_pk=request.user.pk)
+        } )
+   
+def albums_view(request):
+    albums = User_Albums.objects.filter(creator_id= request.user)
+    return render(request,"picApp/albums.html",{'albums':albums}) 
+
+def albumContent_View(request, albumName):
+    album = User_Albums.objects.get(album_name=albumName)
+    posts = album.contents.all()
+    message = "{}/{}"
+    return render(request, "picApp/userImages.html",{'posts':posts, 'message':message.format(request.user.username,albumName)})
+
+def albumCreate_View(request):
+    if request.method == "POST":
+        form = AlbumForm(user_pk=request.user.pk ,data=request.POST)
+        if form.is_valid():
+            newAlbum = form.save()
+            newAlbum.creator = request.user
+            newAlbum.save()
+        return HttpResponseRedirect(reverse("albums"))  
+    else:
+        return render(request,"picApp/albumsAdd.html",{
+            'form': AlbumForm(user_pk=request.user.pk)          
+        })
+    
