@@ -1,5 +1,6 @@
 from django import forms
-from pictureApp.models import User_Post
+from django.forms import fields
+from pictureApp.models import User_Albums, User_Post
 from django.contrib.auth.models import User
 
 fieldCSS = 'width: 300px; margin: 5px;'
@@ -16,8 +17,17 @@ class PostForm(forms.ModelForm):
         queryset=User.objects.all(), widget=forms.CheckboxSelectMultiple
     )
     
-    def __init__(self,user_pk=None,*args, **kwargs):
-        super(PostForm, self).__init__(*args, **kwargs)
-        self.fields['shared_users'].queryset =User.objects.exclude(pk=user_pk)
     
-        
+    
+class AlbumForm(forms.ModelForm):
+    
+    def __init__(self,user_pk=None,*args, **kwargs):
+        super(AlbumForm, self).__init__(*args, **kwargs)
+        self.fields['contents'].queryset = User_Post.objects.filter(main_user_id= user_pk).order_by('-date')
+    
+    class Meta:
+        model = User_Albums
+        fields=['album_name','albumDescription','contents']
+        contents=forms.ModelMultipleChoiceField(
+            queryset=User_Post.objects.all()
+        )

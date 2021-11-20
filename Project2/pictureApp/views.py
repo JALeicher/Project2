@@ -6,8 +6,7 @@ from django.urls import reverse
 
 from taggit.models import Tag
 
-from pictureApp.forms.forms import PostForm
-from .forms import *
+from pictureApp.forms.forms import PostForm, AlbumForm
 from .models import *
 
 # Create your views here.
@@ -17,7 +16,7 @@ def homepage_view(request):
 
 def userposts_view(request, username):
     posts = User_Post.objects.filter(main_user_id= request.user).order_by('-date')
-    return render(request, "picApp/homepage.html",{'posts':posts})
+    return render(request, "picApp/userImages.html",{'posts':posts})
 
 def login_view(request):
     if request.method == "POST":
@@ -46,9 +45,6 @@ def logout_view(request):
     logout(request)
     return HttpResponseRedirect(reverse("homepage"))
 
-def userpage_view(request):
-    return render(request,"picApp/userpage.html")
-
 def imageUpload_view(request):
     if request.method == "POST":
         form = PostForm(request.POST,request.FILES,user_pk=request.user.pk,)
@@ -59,7 +55,23 @@ def imageUpload_view(request):
             form.save_m2m()
         return HttpResponseRedirect(reverse("homepage"))
     else:
-       return render(request, "picApp/imageUpload.html",{"form":PostForm(user_pk=request.user.pk)} )
+       return render(request, "picApp/imageUpload.html",{
+           "form":PostForm(user_pk=request.user.pk)
+        } )
    
 def albums_view(request):
-    return render(request,"picApp/albums.html") 
+    albums = User_Albums.objects.filter(creator_id= request.user)
+    return render(request,"picApp/albums.html",{'albums':albums}) 
+
+def albumCreate_View(request):
+    if request.method == "POST":
+        form = AlbumForm(request.POST)
+        if form.is_valid():
+            newAlbum = form.save()
+            newAlbum.creator = request.user
+        return render(request,"picApp/albums.html") 
+    else:
+        return render(request,"picApp/albumsAdd.html",{
+            'form': AlbumForm(user_pk=request.user.pk)          
+        })
+    
