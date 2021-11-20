@@ -10,5 +10,6 @@ urlpatterns = [
     path("userposts/<str:username>",views.userposts_view, name = "userPosts"),
     path("albums",views.albums_view,name="albums"),
     path("add_album",views.albumCreate_View,name="addAlbum"),
-    path("albums/<str:albumName>",views.albumContent_View,name="viewAlbum")
+    path("albums/<str:albumName>",views.albumContent_View,name="viewAlbum"),
+    path("search", views.search_view , name="search"),
 ]

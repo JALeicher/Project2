@@ -11,7 +11,7 @@ class User_Post(models.Model):
     image = models.ImageField(upload_to='images/')
     date = models.DateTimeField(auto_now_add=True)
     tags = TaggableManager()
-    shared_users=models.ManyToManyField(User, related_name="shared_users", null=True, default=None)
+    shared_users=models.ManyToManyField(User, related_name="shared_users", null=True, blank=True, default=None)
     
     def __str__(self):
         return os.path.basename(self.image.name)

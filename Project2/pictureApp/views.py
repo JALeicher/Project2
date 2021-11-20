@@ -16,7 +16,7 @@ def homepage_view(request):
     return render(request, "picApp/homepage.html",{'posts':posts})
     
 
-def userposts_view(request, username):
+def userposts_view(request):
     posts = User_Post.objects.filter(main_user_id= request.user).order_by('-date')
     message = "{}"
     return render(request, "picApp/userImages.html",{'posts':posts, 'message':message.format(request.user.username)})
@@ -84,6 +84,14 @@ def albumCreate_View(request):
         return render(request,"picApp/albumsAdd.html",{
             'form': AlbumForm(user_pk=request.user.pk)          
         })
+        
+def search_view(request):
+    posts = User_Post.objects.filter(main_user_tags = request.GET.get('search')).order_by('-date')
+    print(request.GET.get('search'))
+    message = "{}"
+    return render(request, "picApp/search.html",{'posts':posts})
+        
+        
         
 '''def showMeta_view(request, post_id):
     selected=User_Post.objects.get(pk = post_id)

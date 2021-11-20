@@ -7,26 +7,29 @@
 <section class="py-5 text-center container">
     <div class="row py-lg-5">
         <div class="col-lg-6 col-md-8 mx-auto">
-            <h1 class="fw-light">{{user.username}}</h1>
-            <p class="lead text-muted">Something short and leading about the collection below—its contents, the creator,
-                etc. Make it short and sweet, but not too short so folks don’t simply skip over it entirely.</p>
+            <h1 class="fw-light" style="color: orange;">{{user.username}}</h1>
+            <p class="lead text-muted">Look at all these albums!</p>
             <p>
                 <a href="{% url 'albums' %}" class="btn btn-primary my-2">Albums</a>
                 <a href="{% url 'userPosts' user.username %}" class="btn btn-secondary my-2">Images</a>
             </p>
+            <a href="{% url 'addAlbum' %}" class="w-100 btn btn-lg btn-primary" style="width: 10vw;">Create New Album</a>
         </div>
     </div>
 </section>
+<div class="d-grid gap-5">
+    
+</div>
 {% for a in albums %}
-<a href="{% url 'viewAlbum' a.album_name %}" class="card">
-    <div class="card-body">
-        <h5 class="card-title">{{a.album_name}}</h5>
-        <p class="card-text">{{a.albumDescription}}</p>
-    </div>
-</a>
+<div style="display: inline-flex">
+    <a href="{% url 'viewAlbum' a.album_name %}" class="card" style="width: 15vw; height: 15vh; margin: 5px;">
+        <div class="card-body">
+            <h5 class="card-title">{{a.album_name}}</h5>
+            <p class="card-text">{{a.albumDescription}}</p>
+        </div>
+    </a>
+</div>
 {% endfor %}
 
-<div class="d-grid gap-5">
-    <a href="{% url 'addAlbum' %}" class="w-100 btn btn-lg btn-primary">Create New Album</a>
-</div>
+
 {% endblock %}
