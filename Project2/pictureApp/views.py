@@ -3,7 +3,6 @@ from django.http.response import HttpResponseRedirect
 from django.shortcuts import render
 from django.contrib.auth import authenticate, login, logout
 from django.urls import reverse
-
 from taggit.models import Tag
 
 from pictureApp.forms.forms import PostForm, AlbumForm
@@ -16,7 +15,8 @@ def homepage_view(request):
 
 def userposts_view(request, username):
     posts = User_Post.objects.filter(main_user_id= request.user).order_by('-date')
-    return render(request, "picApp/userImages.html",{'posts':posts})
+    message = "{}"
+    return render(request, "picApp/userImages.html",{'posts':posts, 'message':message.format(request.user.username)})
 
 def login_view(request):
     if request.method == "POST":
@@ -63,13 +63,20 @@ def albums_view(request):
     albums = User_Albums.objects.filter(creator_id= request.user)
     return render(request,"picApp/albums.html",{'albums':albums}) 
 
+def albumContent_View(request, albumName):
+    album = User_Albums.objects.get(album_name=albumName)
+    posts = album.contents.all()
+    message = "{}/{}"
+    return render(request, "picApp/userImages.html",{'posts':posts, 'message':message.format(request.user.username,albumName)})
+
 def albumCreate_View(request):
     if request.method == "POST":
-        form = AlbumForm(request.POST,user_pk=request.user.pk)
+        form = AlbumForm(user_pk=request.user.pk ,data=request.POST)
         if form.is_valid():
             newAlbum = form.save()
             newAlbum.creator = request.user
-        return render(request,"picApp/albums.html") 
+            newAlbum.save()
+        return HttpResponseRedirect(reverse("albums"))  
     else:
         return render(request,"picApp/albumsAdd.html",{
             'form': AlbumForm(user_pk=request.user.pk)          

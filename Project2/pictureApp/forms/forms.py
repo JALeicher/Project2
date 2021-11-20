@@ -3,12 +3,11 @@ from django.forms import fields
 from pictureApp.models import User_Albums, User_Post
 from django.contrib.auth.models import User
 
-fieldCSS = 'width: 300px; margin: 5px;'
 
 class PostForm(forms.ModelForm):
-    def __init__(self,user_pk=None,*args, **kwargs):
+    def __init__(self,*args,user_pk=None, **kwargs):
         super(PostForm, self).__init__(*args, **kwargs)
-        self.fields['shared_users'].queryset =User.objects.exclude(pk=user_pk)
+        self.fields['shared_users'].queryset = User.objects.exclude(pk=user_pk)
     
     class Meta:
         model = User_Post
@@ -29,5 +28,5 @@ class AlbumForm(forms.ModelForm):
         model = User_Albums
         fields=['album_name','albumDescription','contents']
         contents=forms.ModelMultipleChoiceField(
-            queryset=User_Post.objects.all(), widget=forms.CheckboxSelectMultiple
-        )
+        queryset=User_Post.objects.all(), widget=forms.CheckboxSelectMultiple
+    )

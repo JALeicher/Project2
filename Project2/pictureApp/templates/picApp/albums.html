@@ -18,12 +18,12 @@
     </div>
 </section>
 {% for a in albums %}
-<div class="card">
+<a href="{% url 'viewAlbum' a.album_name %}" class="card">
     <div class="card-body">
         <h5 class="card-title">{{a.album_name}}</h5>
         <p class="card-text">{{a.albumDescription}}</p>
     </div>
-</div>
+</a>
 {% endfor %}
 
 <div class="d-grid gap-5">
