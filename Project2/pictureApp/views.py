@@ -47,7 +47,7 @@ def logout_view(request):
 
 def imageUpload_view(request):
     if request.method == "POST":
-        form = PostForm(request.POST,request.FILES,user_pk=request.user.pk,)
+        form = PostForm(request.POST,request.FILES,user_pk=request.user.pk)
         if form.is_valid():
             newpost = form.save(commit=False)
             newpost.main_user=request.user 
@@ -65,7 +65,7 @@ def albums_view(request):
 
 def albumCreate_View(request):
     if request.method == "POST":
-        form = AlbumForm(request.POST)
+        form = AlbumForm(request.POST,user_pk=request.user.pk)
         if form.is_valid():
             newAlbum = form.save()
             newAlbum.creator = request.user
