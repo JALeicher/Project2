@@ -1,9 +1,11 @@
 from django.db.models.query import EmptyQuerySet
 from django.http import request
 from django.http.response import HttpResponseRedirect
-from django.shortcuts import render
+from django.shortcuts import get_object_or_404, render
 from django.contrib.auth import authenticate, login, logout
+from django.template.defaultfilters import slugify
 from django.urls import reverse
+from taggit.models import Tag
 import piexif
 
 
@@ -86,11 +88,23 @@ def albumCreate_View(request):
         })
         
 def search_view(request):
-    posts = User_Post.objects.filter(main_user_tags = request.GET.get('search')).order_by('-date')
     print(request.GET.get('search'))
-    message = "{}"
-    return render(request, "picApp/search.html",{'posts':posts})
+    posts = User_Post.objects.filter(tags__name__in=[request.GET.get('search')])
+    context = {
+        'posts':posts,
+    }
+    return render(request, 'picApp/homepage.html', context)
+ 
         
+        
+def tagged_view(request,slug):
+    tag = get_object_or_404(Tag, slug=slug)
+    posts = User_Post.objects.filter(tags=tag)
+    context = {
+        'tag':tag,
+        'posts':posts,
+    }
+    return render(request, 'picApp/homepage.html', context)
         
         
 '''def showMeta_view(request, post_id):
