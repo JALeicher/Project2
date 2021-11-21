@@ -1,0 +1,28 @@
+{% extends 'picApp/basepage.html' %}
+
+{% load widget_tweaks %}
+
+{% block head %}
+    <link rel="stylesheet" href="pictureApp\Styles\picApp\bootstrap-tagsinput.css">
+    <script src="pictureApp\static\js\bootstrap-tagsinput.js"></script>
+{% endblock %}
+
+{% block body %}
+<div class="text-center">
+    <img src="{{obj.image.url}}" class="rounded" alt="...">
+</div>
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    <div class="form-group">
+        {{form.tags|add_class:'form-control'}} 
+    </div>
+    <div class="form-group">
+        {{form.shared_users|add_class:'form-control'}}
+    </div>
+    <p>
+        <button class="w-100 btn btn-lg btn-primary" type="submit" value="CreateAlbum">Update</button>
+        <a href="{% url 'deletePost' obj.id  %}" class="btn btn-danger">Delete</a>
+    </p>
+    
+</form>
+{% endblock %}

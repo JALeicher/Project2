@@ -9,7 +9,7 @@ from taggit.models import Tag
 import piexif
 
 
-from pictureApp.forms.forms import PostForm, AlbumForm
+from pictureApp.forms.forms import PostForm, AlbumForm, UpdatePostForm
 from .models import *
 
 # Create your views here.
@@ -18,10 +18,18 @@ def homepage_view(request):
     return render(request, "picApp/homepage.html",{'posts':posts})
     
 
-def userposts_view(request):
-    posts = User_Post.objects.filter(main_user_id= request.user).order_by('-date')
+def userposts_view(request,username):
+    u = User.objects.get(username=username)
+    posts = User_Post.objects.filter(main_user_id = u.id).order_by('-date')
+    otherposts = User_Post.objects.all()
+    postlist = []
+    for i in otherposts:
+        if i.main_user.id == u.id:
+            postlist.append(i)
+        if u in i.shared_users.all():
+            postlist.append(i)
     message = "{}"
-    return render(request, "picApp/userImages.html",{'posts':posts, 'message':message.format(request.user.username)})
+    return render(request, "picApp/userImages.html",{'posts':postlist, 'message':message.format(request.user.username)})
 
 def login_view(request):
     if request.method == "POST":
@@ -72,7 +80,7 @@ def albumContent_View(request, albumName):
     album = User_Albums.objects.get(album_name=albumName)
     posts = album.contents.all()
     message = "{}/{}"
-    return render(request, "picApp/userImages.html",{'posts':posts, 'message':message.format(request.user.username,albumName)})
+    return render(request, "picApp/albumImages.html",{'posts':posts,"album":album ,'message':message.format(request.user.username,albumName)})
 
 def albumCreate_View(request):
     if request.method == "POST":
@@ -94,9 +102,7 @@ def search_view(request):
         'posts':posts,
     }
     return render(request, 'picApp/homepage.html', context)
- 
-        
-        
+     
 def tagged_view(request,slug):
     tag = get_object_or_404(Tag, slug=slug)
     posts = User_Post.objects.filter(tags=tag)
@@ -105,10 +111,31 @@ def tagged_view(request,slug):
         'posts':posts,
     }
     return render(request, 'picApp/homepage.html', context)
+    
+def updatePost_view(request, post_id):
+    obj = get_object_or_404(User_Post, pk = post_id)
+    form = PostForm(request.POST or None, instance = obj,user_pk=request.user.pk)
+    if form.is_valid():
+        form.save()
+        return HttpResponseRedirect(reverse("homepage"))
+    return render(request, "picApp/updatePost.html", {"form":form,"obj":obj})      
         
-        
-'''def showMeta_view(request, post_id):
-    selected=User_Post.objects.get(pk = post_id)
-    image_name = str(selected)
-    meta_dict = piexif.load(image_name)'''
-        
+def viewPost(request, post_id):
+    post = get_object_or_404(User_Post, pk = post_id)
+    return render(request,"picApp/postView.html",{"post":post})
+
+def updateAlbums_view(request, albumName):
+    album = User_Albums.objects.get(album_name=albumName)
+    form = AlbumForm(user_pk=request.user.pk,data=request.POST or None, instance = album)
+    if form.is_valid():
+        form.save()
+        return HttpResponseRedirect(reverse("homepage"))
+    return render(request, "picApp/albumsUpdate.html", {"form":form,"album":album})
+
+def deleteAlbums_view(request, albumName):
+    User_Albums.objects.get(album_name=albumName).delete()
+    return HttpResponseRedirect(reverse("homepage"))
+
+def deletePost_view(request, post_id):
+    User_Post.objects.get(pk=post_id).delete()
+    return HttpResponseRedirect(reverse("homepage"))

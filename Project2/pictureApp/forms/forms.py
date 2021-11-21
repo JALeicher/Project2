@@ -15,9 +15,19 @@ class PostForm(forms.ModelForm):
         shared_users=forms.ModelMultipleChoiceField(
         queryset=User.objects.all(), widget=forms.CheckboxSelectMultiple
     )
+
+class UpdatePostForm(forms.ModelForm):
+    def __init__(self,*args,user_pk=None, **kwargs):
+        super(UpdatePostForm, self).__init__(*args, **kwargs)
+        self.fields['shared_users'].queryset = User.objects.exclude(pk=user_pk)
     
-    
-    
+    class Meta:
+        model = User_Post
+        fields =['tags','shared_users']
+        shared_users=forms.ModelMultipleChoiceField(
+        queryset=User.objects.all(), widget=forms.CheckboxSelectMultiple
+    )
+      
 class AlbumForm(forms.ModelForm):
     
     def __init__(self,user_pk=None,*args, **kwargs):

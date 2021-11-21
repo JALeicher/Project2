@@ -25,3 +25,4 @@ class User_Albums(models.Model):
     
     def __str__(self):
         return str(self.album_name)
+    
