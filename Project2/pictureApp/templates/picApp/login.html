@@ -8,16 +8,17 @@
     <main class="form-signin">
         <form action="{% url 'login' %}" method="post">
             {% csrf_token %}
-            <h1 class="h3 mb-3 fw-normal">Please log in</h1>
-            <div class="form-floating">
+            <h1 class="h3 mb-3 fw-normal" style="margin: 5px; color: orange;">Please log in</h1>
+            <div class="form-floating" style="margin: 5px;">
                 <input type="text" name="username" class="form-control" id="floatingInput" placeholder="Username">
-                <label for="floatingInput">Username</label>
             </div>
-            <div class="form-floating">
+            <div class="form-floating" style="margin: 5px;">
                 <input type="password" name="password" class="form-control" placeholder="Password">
-                <label>Password</label>
             </div>
-            <button class="w-100 btn btn-lg btn-primary" type="submit" value="Login">Log in</button>
+            <div style="padding: 5px;">
+                <button class="w-100 btn btn-lg btn-primary" type="submit" value="Login">Log in</button>
+            </div>
+            
             <p class="mt-5 mb-3 text-muted">Don't have an account? Sign Up <a href="{% url 'signup'%}">here</a></p>
         </form>
     </main>
