@@ -1,4 +1,16 @@
 {% extends 'picApp/basepage.html' %}
 {% block body %}
-    <p>{{ post.shared_users.all }}</p>
+
+
+        <div class="card" style="margin-left: 10px; width: 50vw;">
+            <img src="{{post.image.url}}" class="card-img-top" >
+            <div class="card-body">
+                <div class="card-text">{{post.date}} <br> posted by: {{post.main_user}} <br>
+                    {% for t in post.tags.all %}
+                    <a href="{% url 'tagged' t.slug %}" class="mr-1 badge badge-info">#{{t}}</a>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
 {% endblock %}

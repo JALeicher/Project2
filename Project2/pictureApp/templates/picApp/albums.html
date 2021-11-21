@@ -21,10 +21,10 @@
     
 </div>
 {% for a in albums %}
-<div style="display: inline-flex">
+<div style="display: inline-flex; cursor: pointer;;">
     <div onclick='location.href="albums/{{a.album_name}}";' class="card" style="width: 15vw; height: 15vh; margin: 5px;">
-        <h5 class="card-title">{{a.album_name}}</h5>
-        <p class="card-text">{{a.albumDescription}}</p>
+        <h5 class="card-title" style="margin: 5px;">{{a.album_name}}</h5>
+        <p class="card-text" style="margin: 5px;">{{a.albumDescription}}</p>
     </div>
 </div>
 {% endfor %}

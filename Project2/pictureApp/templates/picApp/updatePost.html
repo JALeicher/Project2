@@ -9,7 +9,7 @@
 
 {% block body %}
 <div class="text-center">
-    <img src="{{obj.image.url}}" class="rounded" alt="...">
+    <img src="{{obj.image.url}}" class="rounded" alt="..." style="width: 60vw;">
 </div>
 <form method="post" enctype="multipart/form-data">
     {% csrf_token %}

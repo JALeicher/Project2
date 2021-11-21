@@ -25,7 +25,7 @@
             <div class="card-body">
                 <div class="card-text">{{p.date}} <br> posted by: {{p.main_user}} <br>
                     {% for t in p.tags.all %}
-                    #{{t}}
+                    <a href="{% url 'tagged' t.slug %}" class="mr-1 badge badge-info">#{{t}}</a>
                     {% endfor %}
                 </div>
             </div>

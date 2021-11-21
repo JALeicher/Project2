@@ -20,8 +20,7 @@ def homepage_view(request):
 
 def userposts_view(request,username):
     u = User.objects.get(username=username)
-    posts = User_Post.objects.filter(main_user_id = u.id).order_by('-date')
-    otherposts = User_Post.objects.all()
+    otherposts = User_Post.objects.all().order_by('-date')
     postlist = []
     for i in otherposts:
         if i.main_user.id == u.id:
@@ -93,24 +92,37 @@ def albumCreate_View(request):
     else:
         return render(request,"picApp/albumsAdd.html",{
             'form': AlbumForm(user_pk=request.user.pk)          
-        })
+        })     
+        
         
 def search_view(request):
     print(request.GET.get('search'))
-    posts = User_Post.objects.filter(tags__name__in=[request.GET.get('search')])
+    posts = User_Post.objects.filter(tags__name__in=[request.GET.get('search')]).order_by('-date')
+    x = []
+    for p in posts:
+        if p.main_user.id == request.user.id:
+            x.append(p)
+        if request.user in p.shared_users.all():
+            x.append(p)  
     context = {
-        'posts':posts,
+        'posts':x,
     }
-    return render(request, 'picApp/homepage.html', context)
+    return render(request, 'picApp/search.html', context)
      
 def tagged_view(request,slug):
     tag = get_object_or_404(Tag, slug=slug)
-    posts = User_Post.objects.filter(tags=tag)
+    posts = User_Post.objects.filter(tags=tag).order_by('-date')
+    x = []
+    for p in posts:
+        if p.main_user.id == request.user.id:
+            x.append(p)
+        if request.user in p.shared_users.all():
+            x.append(p)
     context = {
         'tag':tag,
-        'posts':posts,
+        'posts':x,
     }
-    return render(request, 'picApp/homepage.html', context)
+    return render(request, 'picApp/search.html', context)
     
 def updatePost_view(request, post_id):
     obj = get_object_or_404(User_Post, pk = post_id)
