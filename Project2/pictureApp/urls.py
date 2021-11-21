@@ -14,4 +14,9 @@ urlpatterns = [
     path("albums/<str:albumName>",views.albumContent_View,name="viewAlbum"),
     path("homepage/", views.search_view , name="search"),
     path("homepage/<slug:slug>/", views.tagged_view, name="tagged"),
+    path("userposts/posts/<post_id>", views.viewPost, name="viewPost"),
+    path("userposts/updatePost/<post_id>",views.updatePost_view, name="updatePost"),
+    path("albums/update/<str:albumName>",views.updateAlbums_view, name="updateAlbum"),
+    path("albums/delete/<str:albumName>",views.deleteAlbums_view,name="deleteAlbum"),
+    path("userposts/delete/<post_id>",views.deletePost_view,name="deletePost")
 ]

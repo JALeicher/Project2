@@ -22,12 +22,10 @@
 </div>
 {% for a in albums %}
 <div style="display: inline-flex">
-    <a href="{% url 'viewAlbum' a.album_name %}" class="card" style="width: 15vw; height: 15vh; margin: 5px;">
-        <div class="card-body">
-            <h5 class="card-title">{{a.album_name}}</h5>
-            <p class="card-text">{{a.albumDescription}}</p>
-        </div>
-    </a>
+    <div onclick='location.href="albums/{{a.album_name}}";' class="card" style="width: 15vw; height: 15vh; margin: 5px;">
+        <h5 class="card-title">{{a.album_name}}</h5>
+        <p class="card-text">{{a.albumDescription}}</p>
+    </div>
 </div>
 {% endfor %}
 

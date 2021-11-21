@@ -8,11 +8,12 @@
     <div class="row py-lg-5">
         <div class="col-lg-6 col-md-8 mx-auto">
             <h1 class="fw-light" style="color: orange;">{{message}}</h1>
+            <p class="lead text-muted">{{a.albumDescription}}</p>
             <p>
                 <a href="{% url 'albums' %}" class="btn btn-primary my-2">Albums</a>
                 <a href="{% url 'userPosts' user.username %}" class="btn btn-secondary my-2">Images</a>
             </p>
-            <a href="{% url 'imageUpload' %}" class="w-100 btn btn-lg btn-primary" style="width: 10vw;">Upload Image</a>
+            <a href="{% url 'updateAlbum' album.album_name %}" class="w-100 btn btn-lg btn-primary"style="width: 10vw;">Edit Album</a>
         </div>
     </div>
 </section>
@@ -28,7 +29,7 @@
                     {% endfor %}
                 </div>
             </div>
-            <a href="{% url 'viewPost' p.id %}" class="card-link">view</a>
+            <a href="{% url 'viewPost' p.id %}"class="card-link">View</a>
             <a href="{% url 'updatePost' p.id %}" class="card-link">Edit</a>
         </div>
         {% endfor %}
